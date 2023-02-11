@@ -1,11 +1,10 @@
 const TodoList = require('./../models/todoListModel');
-const APIFeatures=require('./../utils/apiFeatures');
+const APIFeatures = require('./../utils/apiFeatures');
 
 // create new todo
 exports.createTodo = async (req, res) => {
     try {
         const newTodo = await TodoList.create(req.body);
-        console.log(newTodo);
         res.status(201).json({
             status: 'SUCCESS',
             data: {
@@ -30,12 +29,15 @@ exports.getAllTodoLists = async (req, res) => {
 
         const todoLists = await features.query;
 
-        if(todoLists.length === 0) {
+        if (todoLists.length === 0) {
             res.status(200).json({
                 status: 'SUCCESS',
-                message: 'No todo lists found'
+                data: {
+                    todoLists: 'No todo lists found'
+                }
+
             })
-        }else {
+        } else {
             res.status(200).json({
                 status: 'SUCCESS',
                 result: todoLists.length,
@@ -57,13 +59,26 @@ exports.getAllTodoLists = async (req, res) => {
 
 exports.getTodo = async (req, res) => {
     try {
-        const todo = await TodoList.findById(req.params.id);
-        res.status(200).json({
-            status: 'SUCCESS',
-            data: {
-                todo
-            }
-        })
+        // const todo = await TodoList.findById(req.params.id);
+        const features = new APIFeatures(TodoList.findById(req.params.id)).limitFields();
+        const todo = await features.query;
+        if (!todo) {
+            res.status(200).json({
+                status: 'SUCCESS',
+                data: {
+                    todo: 'No todo find against this ID please check id again.'
+                }
+            })
+        } else {
+            res.status(200).json({
+                status: 'SUCCESS',
+                data: {
+                    todo
+                }
+            })
+        }
+
+
     } catch (err) {
         res.status(400).json({
             status: 'ERROR',
@@ -76,11 +91,7 @@ exports.getTodo = async (req, res) => {
 // update specific todo
 exports.updateTodo = async (req, res) => {
     try {
-        const updatedTodo = await TodoList.findByIdAndUpdate(req.params.id,
-            {
-                ...req.body,
-                createdAt:  Date.now()
-            },
+        const updatedTodo = await TodoList.findByIdAndUpdate(req.params.id, req.body,
             {new: true, runValidators: true});
         res.status(200).json({
             status: 'SUCCESS',
@@ -95,8 +106,6 @@ exports.updateTodo = async (req, res) => {
         })
     }
 }
-
-
 
 
 // delete specific todo
