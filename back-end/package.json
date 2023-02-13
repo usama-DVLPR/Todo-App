@@ -9,6 +9,7 @@
   "author": "usama",
   "license": "ISC",
   "dependencies": {
+    "cores": "^0.8.5",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",

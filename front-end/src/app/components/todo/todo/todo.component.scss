@@ -1,3 +1,9 @@
-.todo-app{
-  background-image:url('/assets/images/bg_todo.png')
+.todo-app {
+  background-image: url("/assets/images/bg_todo.png");
+}
+.input-assumpte:checked {
+  background-color: #d59100;
+}
+.blurred {
+  filter: blur(5px);
 }

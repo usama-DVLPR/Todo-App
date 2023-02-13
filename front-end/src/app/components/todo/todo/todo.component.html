@@ -1,5 +1,90 @@
-<section class="todo-app h-screen flex justify-center items-center ">
-  <div class="bg-white">
-    Todo app
+<section
+  class="todo-app h-screen flex justify-center items-center"
+  [ngClass]="{ blurred: isBlurred }"
+>
+  <div class="bg-white w-screen xsm:w-[500px] pt-8 py-14 rounded-2xl">
+    <!-- top section content -->
+    <div class="relative">
+      <div class="px-8 flex flex-col gap-4 mb-6">
+        <div class="flex justify-between items-baseline">
+          <h1 class="text-heading-blue">
+            <span class="text-2xl font-bold">Thursday,</span>
+            <span class="text-xl">10th</span>
+          </h1>
+          <span class="text-txt-gray">{{ list.length }} Tasks</span>
+        </div>
+        <p class="text-txt-gray">December</p>
+      </div>
+      <div class="h-[2px] bg-txt-gray mb-4"></div>
+      <!-- button  -->
+      <div
+        class="w-14 h-14 pt-[3px] pl-[1px] text-white text-center bg-primary rounded-full absolute bottom-[-25px] right-5 cursor-pointer hover:bg-secondary"
+        (click)="onShow()"
+      >
+        <span class="text-4xl">+</span>
+      </div>
+    </div>
+
+    <!-- todo list items  -->
+
+    <!-- apply ngfor on that div  -->
+    <div class="mt-16" *ngFor="let item of list">
+      <div>
+        <div class="px-8">
+          <div class="flex justify-between items-center">
+            <div class="flex gap-5 items-center">
+              <!-- <input
+                type="checkbox"
+                [(ngModel)]="isCompleted"
+                (change)="onIsCompleted($event)"
+                class="w-4 h-4 checked:bg-primary"
+              /> -->
+              <p class="text-txt-primary font-semibold">{{ item["title"] }}</p>
+            </div>
+            <div class="flex gap-2">
+              <fa-icon
+                class="text-primary cursor-pointer hover:text-secondary"
+                [icon]="faEdit"
+                (click)="onEdit(item['_id'])"
+              >
+                ></fa-icon
+              >
+              <fa-icon
+                class="text-primary cursor-pointer hover:text-secondary"
+                [icon]="faTrashRestore"
+                (click)="onDelete(item['_id'])"
+              ></fa-icon>
+            </div>
+          </div>
+        </div>
+        <div class="h-[1px] bg-txt-gray opacity-50 mb-4"></div>
+      </div>
+    </div>
   </div>
 </section>
+
+<p-dialog
+  header="Add New Todo"
+  [(visible)]="display"
+  [draggable]="false"
+  (onHide)="onClose()"
+>
+  <div>
+    <form [formGroup]="newTodo" (ngSubmit)="onSubmit()">
+      <div class="flex flex-col xsm:flex-row justify-center items-center gap-3">
+        <input
+          type="text"
+          placeholder="Enter your Todo..."
+          class="border-[2px] rounded border-primary w-80 py-2 px-3 text-txt-primary focus:border-secondary focus:outline-none"
+          formControlName="title"
+        />
+        <button
+          class="bg-primary hover:bg-secondary px-5 py-[10px] rounded text-white w-full xsm:w-fit"
+          type="submit"
+        >
+          Add
+        </button>
+      </div>
+    </form>
+  </div>
+</p-dialog>
